@@ -15,7 +15,8 @@ import com.aplinno.dscatalog.service.exceptions.EntityNotFaundException;
 public class ResourceExeptionHandler {
 
 	@ExceptionHandler(EntityNotFaundException.class)
-	public ResponseEntity<StandardError> entityNotFound(EntityNotFaundException e, HttpServletRequest resquest) {
+	public ResponseEntity<StandardError> 
+	      entityNotFound(EntityNotFaundException e, HttpServletRequest resquest) {
 
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());
