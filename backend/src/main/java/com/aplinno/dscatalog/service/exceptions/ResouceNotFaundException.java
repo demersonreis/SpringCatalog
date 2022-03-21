@@ -1,10 +1,10 @@
 package com.aplinno.dscatalog.service.exceptions;
 
-public class EntityNotFaundException extends RuntimeException {
+public class ResouceNotFaundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public EntityNotFaundException(String msg) {
+	public ResouceNotFaundException(String msg) {
 		super(msg);
 		
 	}

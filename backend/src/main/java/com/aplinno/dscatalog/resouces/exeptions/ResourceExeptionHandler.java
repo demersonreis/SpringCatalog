@@ -9,14 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.aplinno.dscatalog.service.exceptions.EntityNotFaundException;
+import com.aplinno.dscatalog.service.exceptions.ResouceNotFaundException;
 
 @ControllerAdvice
 public class ResourceExeptionHandler {
 
-	@ExceptionHandler(EntityNotFaundException.class)
+	@ExceptionHandler(ResouceNotFaundException.class)
 	public ResponseEntity<StandardError> 
-	      entityNotFound(EntityNotFaundException e, HttpServletRequest resquest) {
+	      entityNotFound(ResouceNotFaundException e, HttpServletRequest resquest) {
 
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());
