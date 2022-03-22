@@ -9,22 +9,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.aplinno.dscatalog.service.exceptions.DataBaseException;
 import com.aplinno.dscatalog.service.exceptions.ResouceNotFaundException;
 
 @ControllerAdvice
 public class ResourceExeptionHandler {
 
+	HttpStatus statusBad = HttpStatus.BAD_REQUEST;
+	HttpStatus statusNot = HttpStatus.NOT_FOUND;
+
 	@ExceptionHandler(ResouceNotFaundException.class)
-	public ResponseEntity<StandardError> 
-	      entityNotFound(ResouceNotFaundException e, HttpServletRequest resquest) {
+	public ResponseEntity<StandardError> entityNotFound(ResouceNotFaundException e, HttpServletRequest resquest) {
 
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());
-		err.setStatus(HttpStatus.NOT_FOUND.value());
+		err.setStatus(statusNot.value());
 		err.setError("Resouce not found");
 		err.setMessage(e.getMessage());
 		err.setPath(resquest.getRequestURI());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+		return ResponseEntity.status(statusNot).body(err);
+
+	}
+
+	@ExceptionHandler(DataBaseException.class)
+	public ResponseEntity<StandardError> dataBase(DataBaseException e, HttpServletRequest resquest) {
+
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(statusBad.value());
+		err.setError("Database exception");
+		err.setMessage(e.getMessage());
+		err.setPath(resquest.getRequestURI());
+		return ResponseEntity.status(statusBad).body(err);
 
 	}
 }
