@@ -15,8 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.aplinno.SpringCatalog.dto.CategoryDTO;
 import com.aplinno.SpringCatalog.dto.ProductDTO;
 import com.aplinno.SpringCatalog.entities.Product;
+import com.aplinno.SpringCatalog.entities.category;
+import com.aplinno.SpringCatalog.repositories.CategoryRepository;
 import com.aplinno.SpringCatalog.repositories.ProductRepository;
 import com.aplinno.SpringCatalog.service.exceptions.DataBaseException;
 import com.aplinno.SpringCatalog.service.exceptions.ResouceNotFaundException;
@@ -26,6 +29,9 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository repository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(PageRequest pageRequest) {
@@ -47,8 +53,7 @@ public class ProductService {
 	public ProductDTO ProductInsert(ProductDTO dto) {
 
 		Product entity = new Product();
-		//entity.setName(dto.getName());
-
+		copyDtoToEntity(dto, entity);
 		entity = repository.save(entity);
 
 		return new ProductDTO(entity);
@@ -59,7 +64,7 @@ public class ProductService {
 
 		try {
 			Product entity = repository.getOne(id);
-			//entity.setName(dto.getName());
+			copyDtoToEntity(dto, entity);
 			entity = repository.save(entity);
 			return new ProductDTO(entity);
 
@@ -82,6 +87,22 @@ public class ProductService {
 
 			throw new DataBaseException("Integrity Violation");
 
+		}
+
+	}
+
+	private void copyDtoToEntity(ProductDTO dto, Product entity) {
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setDate(dto.getDate());
+		entity.setImgUrl(dto.getImgUrl());
+		entity.setPrice(dto.getPrice());
+
+		entity.getCategories().clear();
+		for (CategoryDTO catDto : dto.getCategories()) {
+
+			category category = categoryRepository.getOne(catDto.getId());
+			entity.getCategories().add(category);
 		}
 
 	}
